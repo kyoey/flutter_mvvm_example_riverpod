@@ -2,7 +2,9 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_mvvm_example/app.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-abstract class ViewModel extends ChangeNotifier with ViewModelMixin {}
+abstract class ViewModel<T> extends StateNotifier<T> with ViewModelMixin {
+  ViewModel(state) : super(state);
+}
 
 mixin ViewModelMixin {
   @protected
