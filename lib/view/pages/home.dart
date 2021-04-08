@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mvvm_example/models/controllers/app_state_controller.dart';
+import 'package:flutter_mvvm_example/view/pages/description.dart';
+import 'package:flutter_mvvm_example/view/pages/input.dart';
 import 'package:flutter_mvvm_example/view/widgets/change_title_dialog.dart';
 import 'package:flutter_mvvm_example/view_model/home_view_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+
+import '../../view_model/home_view_model.dart';
 
 class Home extends StatelessWidget {
   const Home({Key? key}) : super(key: key);
@@ -12,6 +16,32 @@ class Home extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const _HomeTitle(),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.edit),
+            onPressed: () => {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) {
+                    return Input();
+                  },
+                ),
+              ),
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.description),
+            onPressed: () => {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) {
+                    return Description();
+                  },
+                ),
+              ),
+            },
+          ),
+        ],
       ),
       body: const _Memos(),
       floatingActionButton: FloatingActionButton(
@@ -27,7 +57,7 @@ class _HomeTitle extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    final title = watch(appStateControllerProvider.state).title;
+    final title = watch(homeViewModelProvider.notifier).title;
     return Text(title);
   }
 }
@@ -37,7 +67,7 @@ class _Memos extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, ScopedReader watch) {
-    final memos = watch(homeViewModel).memos;
+    final memos = watch(homeViewModelProvider.notifier).memos;
     return ListView(
       children: [
         for (final memo in memos)
@@ -48,7 +78,8 @@ class _Memos extends ConsumerWidget {
         MaterialButton(
           color: Colors.greenAccent,
           splashColor: Colors.greenAccent.shade400,
-          onPressed: () => context.read(homeViewModel).onTapAddMemo(),
+          onPressed: () =>
+              context.read(homeViewModelProvider.notifier).onTapAddMemo(),
           child: Icon(Icons.add, color: Colors.white),
         ),
       ],
