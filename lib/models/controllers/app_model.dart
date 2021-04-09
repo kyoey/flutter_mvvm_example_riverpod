@@ -22,7 +22,6 @@ class AppModel extends Model {
 
   @override
   final ProviderReference ref;
-
   final StateProvider<AppState> appStateProvider;
   final StateProvider<AppDescriptionState> appDescriptionStateProvider;
 

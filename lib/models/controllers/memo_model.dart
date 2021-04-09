@@ -11,10 +11,8 @@ final memoModel = Provider.autoDispose((ref) {
 
 class MemoModel extends Model {
   MemoModel(this.ref, this.memoStateProvider);
-
   @override
   final ProviderReference ref;
-
   final StateProvider<MemoState> memoStateProvider;
 
   void addMemo(String title, String contents) {
