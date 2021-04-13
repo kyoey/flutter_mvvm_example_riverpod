@@ -4,16 +4,15 @@ import 'package:flutter_mvvm_example/models/controllers/model.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-/// Modelで操作するStateのprovider
-final appStateProvider = StateProvider((_) => AppState());
-final appDescriptionStateProvider = StateProvider((_) => AppDescriptionState());
+/// Stateのprovider
+final _appStateProvider = StateProvider((_) => AppState());
+final _appDescriptionStateProvider =
+    StateProvider((_) => AppDescriptionState());
 
 /// ModelのProvider
 final appModelProvider = Provider.autoDispose(
   (ref) => _AppModel(
     ref,
-    appStateProvider,
-    appDescriptionStateProvider,
   ),
 );
 
@@ -21,26 +20,26 @@ final appModelProvider = Provider.autoDispose(
 class _AppModel extends Model {
   _AppModel(
     this.ref,
-    this.appStateProvider,
-    this.appDescriptionStateProvider,
   );
 
   @override
   final ProviderReference ref;
-  final StateProvider<AppState> appStateProvider;
-  final StateProvider<AppDescriptionState> appDescriptionStateProvider;
+
+  StateProvider<AppState> get appStateProvider => _appStateProvider;
+  StateProvider<AppDescriptionState> get appDescriptionStateProvider =>
+      _appDescriptionStateProvider;
 
   Future updateTitle(String title) async {
     await Future.delayed(const Duration(seconds: 1));
-    ref.read(appStateProvider).state =
-        ref.read(appStateProvider).state.copyWith(title: title);
+    ref.read(_appStateProvider).state =
+        ref.read(_appStateProvider).state.copyWith(title: title);
   }
 
   Future updateDescription(String description) async {
     await Future.delayed(const Duration(seconds: 2));
 
-    ref.read(appDescriptionStateProvider).state = ref
-        .read(appDescriptionStateProvider)
+    ref.read(_appDescriptionStateProvider).state = ref
+        .read(_appDescriptionStateProvider)
         .state
         .copyWith(description: description);
   }

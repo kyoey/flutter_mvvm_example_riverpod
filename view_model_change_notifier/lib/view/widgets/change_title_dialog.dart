@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_mvvm_example/models/app_state/app_state.dart';
 import 'package:flutter_mvvm_example/models/controllers/app_model.dart';
 import 'package:flutter_mvvm_example/utils/view_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,7 +11,12 @@ final _formKey = GlobalKey<FormState>();
 /// ControllerのProvider
 
 final _dialogControllerProvider = ChangeNotifierProvider.autoDispose((ref) {
-  return _ChangeTitleDialogController(ref);
+  final model = ref.read(appModelProvider);
+  final appState = ref.watch(model.appStateProvider).state;
+  return _ChangeTitleDialogController(
+    ref,
+    appState,
+  );
 });
 
 /// Controller
@@ -20,8 +26,12 @@ class _ChangeTitleDialogController extends ViewModel {
   bool get isProcessing => _isProcessing;
   @override
   final ProviderReference ref;
+  final AppState appState;
 
-  _ChangeTitleDialogController(this.ref);
+  _ChangeTitleDialogController(
+    this.ref,
+    this.appState,
+  );
 
   void onCompleteEditing(TextEditingController controller) async {
     final isValidTitle = _formKey.currentState?.validate() ?? false;
@@ -51,8 +61,8 @@ class _TitleForm extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final title =
-        useProvider(appStateProvider.select((value) => value.state.title));
+    final title = useProvider(
+        _dialogControllerProvider.select((value) => value.appState.title));
     final controller = TextEditingController(text: title);
     return Form(
       key: _formKey,

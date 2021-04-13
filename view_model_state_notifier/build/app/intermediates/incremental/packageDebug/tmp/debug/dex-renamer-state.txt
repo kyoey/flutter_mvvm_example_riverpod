@@ -1,4 +1,0 @@
-#Fri Apr 09 10:56:29 JST 2021
-base.0=/Users/k.oikawa/develop/sample/flutter_mvvm_example_riverpod/view_model_state_notifier/build/app/intermediates/dex/debug/mergeDexDebug/classes.dex
-path.0=classes.dex
-renamed.0=classes.dex

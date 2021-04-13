@@ -16,13 +16,17 @@ void main() {
       addTearDown(container.dispose);
       final listener = Listener();
 
+      /// Model
+      final model = container.read(memoModelProvider);
+
+      /// State
       container.listen<StateController<MemoState>>(
-        memoStateProvider,
+        model.memoStateProvider,
         didChange: (sub) => listener(sub.read().state),
       );
 
       final expectedState = MemoState();
-      expect(container.read(memoStateProvider).state, expectedState);
+      expect(container.read(model.memoStateProvider).state, expectedState);
     });
 
     test('MemoModel should add memo successfully', () {
@@ -30,8 +34,11 @@ void main() {
       addTearDown(container.dispose);
       final listener = Listener();
 
+      /// Model
+      final model = container.read(memoModelProvider);
+
       container.listen<StateController<MemoState>>(
-        memoStateProvider,
+        model.memoStateProvider,
         didChange: (sub) => listener(sub.read().state),
       );
 
@@ -40,7 +47,7 @@ void main() {
       final expectedMemo =
           Memo.uuid().copyWith(title: 'テストタイトル', contents: 'テストコンテンツ');
       final expectedState = MemoState(memos: [expectedMemo]);
-      expect(container.read(memoStateProvider).state, expectedState);
+      expect(container.read(model.memoStateProvider).state, expectedState);
     });
 
     test('MemoModel should update loading successfully', () {
@@ -48,18 +55,21 @@ void main() {
       addTearDown(container.dispose);
       final listener = Listener();
 
+      /// Model
+      final model = container.read(memoModelProvider);
+
       container.listen<StateController<MemoState>>(
-        memoStateProvider,
+        model.memoStateProvider,
         didChange: (sub) => listener(sub.read().state),
       );
 
       container.read(memoModelProvider).toggleUpdate();
 
-      expect(container.read(memoStateProvider).state.isLoading, true);
+      expect(container.read(model.memoStateProvider).state.isLoading, true);
 
       container.read(memoModelProvider).toggleUpdate();
 
-      expect(container.read(memoStateProvider).state.isLoading, false);
+      expect(container.read(model.memoStateProvider).state.isLoading, false);
     });
   });
 }

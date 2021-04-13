@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_mvvm_example/view/pages/debug.dart';
 import 'package:flutter_mvvm_example/view/pages/description.dart';
 import 'package:flutter_mvvm_example/view/pages/input.dart';
 import 'package:flutter_mvvm_example/view/widgets/change_title_dialog.dart';
@@ -37,6 +38,18 @@ class Home extends StatelessWidget {
                 MaterialPageRoute(
                   builder: (context) {
                     return Description();
+                  },
+                ),
+              ),
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.settings),
+            onPressed: () => {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) {
+                    return Debug();
                   },
                 ),
               ),

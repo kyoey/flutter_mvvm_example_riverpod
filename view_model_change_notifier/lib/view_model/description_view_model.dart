@@ -6,9 +6,10 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 /// ViewModelのProvider
 final descriptionViewModelProvider = ChangeNotifierProvider.autoDispose((ref) {
-  final app = ref.watch(appDescriptionStateProvider).state;
+  final model = ref.read(appModelProvider);
+  final appState = ref.watch(model.appDescriptionStateProvider).state;
 
-  return _DescriptionViewModel(ref, app);
+  return _DescriptionViewModel(ref, appState);
 });
 
 /// ViewModel

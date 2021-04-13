@@ -4,19 +4,20 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// Modelで操作するStateのprovider
-final memoStateProvider = StateProvider((_) => MemoState());
+final _memoStateProvider = StateProvider((_) => MemoState());
 
 /// ModelのProvider
 final memoModelProvider = Provider.autoDispose((ref) {
-  return MemoModel(ref, memoStateProvider);
+  return MemoModel(ref);
 });
 
 /// Model
 class MemoModel extends Model {
-  MemoModel(this.ref, this.memoStateProvider);
+  MemoModel(this.ref);
   @override
   final ProviderReference ref;
-  final StateProvider<MemoState> memoStateProvider;
+
+  StateProvider<MemoState> get memoStateProvider => _memoStateProvider;
 
   void addMemo(String title, String contents) {
     final oldMemos = ref.read(memoStateProvider).state.memos;

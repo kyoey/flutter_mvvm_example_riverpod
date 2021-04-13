@@ -6,8 +6,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 /// ViewModelのProvider
 final inputViewModelProvider = ChangeNotifierProvider.autoDispose((ref) {
-  final app = ref.watch(appStateProvider).state;
-  return _InputViewModel(ref, app);
+  final model = ref.read(appModelProvider);
+  final appState = ref.watch(model.appStateProvider).state;
+  return _InputViewModel(ref, appState);
 });
 
 class _InputViewModel extends ViewModel {

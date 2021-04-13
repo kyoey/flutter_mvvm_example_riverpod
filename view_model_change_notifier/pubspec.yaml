@@ -23,6 +23,11 @@ dependencies:
   json_serializable: ^4.1.0
   uuid: ^3.0.4
 
+  # For API
+  dio: ^4.0.0
+  retrofit: ^2.0.0-beta1
+  logger: any
+
   # For Tests
   mockito: ^5.0.3
 
@@ -36,6 +41,9 @@ dev_dependencies:
 
   # For Models
   freezed: ^0.14.1+2
+
+  # For API
+  retrofit_generator: any
 
 flutter:
   uses-material-design: true
