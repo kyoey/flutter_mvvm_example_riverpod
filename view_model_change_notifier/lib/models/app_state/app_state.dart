@@ -7,5 +7,6 @@ part 'app_state.freezed.dart';
 abstract class AppState with _$AppState {
   const factory AppState({
     @Default('HOME') String title,
+    @Default('') String description,
   }) = _AppState;
 }

@@ -1,75 +1,44 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter_mvvm_example/models/controllers/memo_model.dart';
 import 'package:flutter_mvvm_example/models/memo/memo.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:mockito/mockito.dart';
-
-class Listener extends Mock {
-  void call(MemoState value);
-}
 
 void main() {
   group('MemoModel state management tests', () {
     test('MemoModel should be initialize successfully', () {
       final container = ProviderContainer();
       addTearDown(container.dispose);
-      final listener = Listener();
-
-      /// Model
-      final model = container.read(memoModelProvider);
-
-      /// State
-      container.listen<StateController<MemoState>>(
-        model.memoStateProvider,
-        didChange: (sub) => listener(sub.read().state),
-      );
 
       final expectedState = MemoState();
-      expect(container.read(model.memoStateProvider).state, expectedState);
+      expect(container.read(memoModelProvider), expectedState);
     });
 
     test('MemoModel should add memo successfully', () {
       final container = ProviderContainer();
       addTearDown(container.dispose);
-      final listener = Listener();
 
       /// Model
       final model = container.read(memoModelProvider);
 
-      container.listen<StateController<MemoState>>(
-        model.memoStateProvider,
-        didChange: (sub) => listener(sub.read().state),
-      );
-
-      container.read(memoModelProvider).addMemo('テストタイトル', 'テストコンテンツ');
+      container.read(memoModelProvider.notifier).addMemo('テストタイトル', 'テストコンテンツ');
 
       final expectedMemo =
           Memo.uuid().copyWith(title: 'テストタイトル', contents: 'テストコンテンツ');
       final expectedState = MemoState(memos: [expectedMemo]);
-      expect(container.read(model.memoStateProvider).state, expectedState);
+      expect(container.read(memoModelProvider), expectedState);
     });
 
     test('MemoModel should update loading successfully', () {
       final container = ProviderContainer();
       addTearDown(container.dispose);
-      final listener = Listener();
 
-      /// Model
-      final model = container.read(memoModelProvider);
+      container.read(memoModelProvider.notifier).toggleUpdate();
 
-      container.listen<StateController<MemoState>>(
-        model.memoStateProvider,
-        didChange: (sub) => listener(sub.read().state),
-      );
+      expect(container.read(memoModelProvider).isLoading, true);
 
-      container.read(memoModelProvider).toggleUpdate();
+      container.read(memoModelProvider.notifier).toggleUpdate();
 
-      expect(container.read(model.memoStateProvider).state.isLoading, true);
-
-      container.read(memoModelProvider).toggleUpdate();
-
-      expect(container.read(model.memoStateProvider).state.isLoading, false);
+      expect(container.read(memoModelProvider).isLoading, false);
     });
   });
 }

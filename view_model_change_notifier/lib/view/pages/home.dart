@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_mvvm_example/models/controllers/app_model.dart';
+import 'package:flutter_mvvm_example/models/controllers/memo_model.dart';
 import 'package:flutter_mvvm_example/view/pages/debug.dart';
 import 'package:flutter_mvvm_example/view/pages/description.dart';
 import 'package:flutter_mvvm_example/view/pages/input.dart';
@@ -72,8 +74,7 @@ class _HomeTitle extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final title = useProvider(
-        homeViewModelProvider.select((value) => value.appState.title));
+    final title = useProvider(appModelProvider.select((value) => value.title));
     return Text(title);
   }
 }
@@ -84,8 +85,7 @@ class _Memos extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final memos = useProvider(
-        homeViewModelProvider.select((value) => value.memoState.memos));
+    final memos = useProvider(memoModelProvider.select((value) => value.memos));
 
     return ListView(
       children: [

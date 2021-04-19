@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_mvvm_example/app.dart';
 import 'package:flutter_mvvm_example/models/app_state/app_state.dart';
 import 'package:flutter_mvvm_example/models/controllers/app_model.dart';
 import 'package:flutter_mvvm_example/utils/view_model.dart';
@@ -11,27 +12,28 @@ final _formKey = GlobalKey<FormState>();
 /// ControllerのProvider
 
 final _dialogControllerProvider = ChangeNotifierProvider.autoDispose((ref) {
-  final model = ref.read(appModelProvider);
-  final appState = ref.watch(model.appStateProvider).state;
   return _ChangeTitleDialogController(
-    ref,
-    appState,
+    ref.read,
   );
 });
 
 /// Controller
 
 class _ChangeTitleDialogController extends ViewModel {
+  _ChangeTitleDialogController(
+    this.read,
+  );
+
   bool _isProcessing = false;
   bool get isProcessing => _isProcessing;
   @override
-  final ProviderReference ref;
-  final AppState appState;
+  final Reader read;
 
-  _ChangeTitleDialogController(
-    this.ref,
-    this.appState,
-  );
+  /// Model
+  AppModel get appModel => read(appModelProvider.notifier);
+
+  /// State
+  AppState get appState => read(appModelProvider);
 
   void onCompleteEditing(TextEditingController controller) async {
     final isValidTitle = _formKey.currentState?.validate() ?? false;
@@ -41,7 +43,7 @@ class _ChangeTitleDialogController extends ViewModel {
     notifyListeners();
 
     final title = controller.text;
-    await ref.read(appModelProvider).updateTitle(title);
+    await appModel.updateTitle(title);
 
     Navigator.of(buildContext).pop();
   }
@@ -62,7 +64,7 @@ class _TitleForm extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final title = useProvider(
-        _dialogControllerProvider.select((value) => value.appState.title));
+        _dialogControllerProvider.select((model) => model.appState.title));
     final controller = TextEditingController(text: title);
     return Form(
       key: _formKey,

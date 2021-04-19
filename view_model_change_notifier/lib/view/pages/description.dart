@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:flutter_mvvm_example/models/controllers/app_model.dart';
 import 'package:flutter_mvvm_example/view_model/description_view_model.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -23,8 +24,9 @@ class _Contents extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final description = useProvider(descriptionViewModelProvider
-        .select((value) => value.appDescriptionState.description));
+    final description =
+        useProvider(appModelProvider.select((value) => value.description));
+
     final titleController = TextEditingController(text: description);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,

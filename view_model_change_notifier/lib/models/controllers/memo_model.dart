@@ -3,35 +3,25 @@ import 'package:flutter_mvvm_example/models/memo/memo.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-/// Modelで操作するStateのprovider
-final _memoStateProvider = StateProvider((_) => MemoState());
-
 /// ModelのProvider
-final memoModelProvider = Provider.autoDispose((ref) {
-  return MemoModel(ref);
+final memoModelProvider = StateNotifierProvider<MemoModel, MemoState>((ref) {
+  return MemoModel();
 });
 
 /// Model
-class MemoModel extends Model {
-  MemoModel(this.ref);
-  @override
-  final ProviderReference ref;
-
-  StateProvider<MemoState> get memoStateProvider => _memoStateProvider;
+class MemoModel extends Model<MemoState> {
+  MemoModel() : super(MemoState());
 
   void addMemo(String title, String contents) {
-    final oldMemos = ref.read(memoStateProvider).state.memos;
-    ref.read(memoStateProvider).state =
-        ref.read(memoStateProvider).state.copyWith(memos: [
-      ...oldMemos,
+    state = state.copyWith(memos: [
+      ...state.memos,
       Memo.uuid().copyWith(title: title, contents: contents),
     ]);
   }
 
   void toggleUpdate() {
-    ref.read(memoStateProvider).state = ref
-        .read(memoStateProvider)
-        .state
-        .copyWith(isLoading: !ref.read(memoStateProvider).state.isLoading);
+    state = state.copyWith(
+      isLoading: !state.isLoading,
+    );
   }
 }
